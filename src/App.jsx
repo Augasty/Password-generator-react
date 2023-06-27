@@ -2,6 +2,9 @@
 import { useState } from 'react'
 import './App.css'
 import usePasswordGenerator from './hooks/usePasswordGenerator'
+import StrengthChecker from './components/StrengthChecker'
+import CustomButton from './components/CustomButton'
+import CheckBox from './components/CheckBox'
 
 function App() {
 
@@ -22,29 +25,38 @@ function App() {
   const { password, errorMessage, generatePassword } = usePasswordGenerator()
 
 
-  const handleCopy=()=>{
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = () => {
     navigator.clipboard.writeText(password)
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false)
+    }, 1000);
   }
 
-  const handleLength = (e) =>{
+  const handleLength = (e) => {
     setLength(e.target.value)
   }
 
 
 
 
-  
+
 
 
 
 
   return (
     <div className='container'>
+
       {/* password text and copy button */}
       {password && <div className='header'>
         <div className='title'>{password}</div>
-        <button className='copyBtn' onClick={() => handleCopy()}>Copy</button>
+        <CustomButton onClick={() => handleCopy()} text={copied ? 'Copied' : 'Copy'} customClass='copyBtn'/>
       </div>}
+
+
 
       {/* character length slider */}
       <div className='charLength'>
@@ -52,25 +64,23 @@ function App() {
           <label>Character length: </label>
           <label>{length} </label>
         </span>
-        <input type='range' min='4' max='20' value={length} onChange={()=>handleLength} />
-      </div>
-      {/* checkboxes */}
-      <div className='checkboxes'>
-        {checkboxData.map((cb, idx) => (
-          <div key={idx}>
-            <input type='checkbox' checked={cb.state} onChange={() => handleCheckboxData(idx)}></input>
-            <div>{cb.title}</div>
-          </div>
-        ))}
+        <input type='range' min='4' max='20' value={length} onChange={handleLength} />
       </div>
 
+
+      {/* checkboxes */}
+      <CheckBox checkboxData={checkboxData} onChange={handleCheckboxData}/>
+
+
+      {/* strength */}
+      <StrengthChecker password={password}/>
 
       {/* error */}
-      
-    {errorMessage && <div className='errorMessage'>{errorMessage}</div>}
+      {errorMessage && <div className='errorMessage'>{errorMessage}</div>}
 
       {/* generate button */}
-      <button className='generateBtn' onClick={() => generatePassword(checkboxData,length)}>Generate</button>
+      
+      <CustomButton onClick={() => generatePassword(checkboxData, length)} text='Generate' customClass='generateBtn'/>
     </div>
   )
 }

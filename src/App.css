@@ -59,7 +59,7 @@ button{
   font-size: 16px;
   font-weight: 700;
   color: white;  
-  gap: 10px;
+  gap: 5px;
   padding-bottom: 25px;
 }
 
@@ -78,4 +78,12 @@ button{
 .errorMessage{
   color: red;
   padding-bottom: 5px;
+}
+
+.password-strength {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  color: white;
 }
